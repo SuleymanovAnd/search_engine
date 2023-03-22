@@ -1,0 +1,8 @@
+//
+// Created by Андрей on 22.03.2023.
+//
+
+#ifndef SEARCH_ENGINE_CONVERTERJSON_H
+#define SEARCH_ENGINE_CONVERTERJSON_H
+
+#endif //SEARCH_ENGINE_CONVERTERJSON_H
