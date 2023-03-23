@@ -5,9 +5,11 @@ set(JSON_Install OFF CACHE INTERNAL "")
 set(SOURCE
         main.cpp
         ConverterJSON.cpp
+        resources.qrc
         )
 set(INCLUDE
         ${MY_DIRECTORY}/ConverterJSON.h
+        ${MY_DIRECTORY}/config_exception.h
         )
 add_subdirectory(nlohmann_json)
 add_executable(search_engine ${SOURCE} ${INCLUDE})
