@@ -9,20 +9,21 @@
 #include "nlohmann/json.hpp"
 #include "config_exception.h"
 struct config{
-    config (std::string _name, double _version,int _mResponses);
-    config (std::string _name, double _version) : config(_name,_version, 5){};
+    config (std::string _name, std::string _version,int _mResponses);
+    config (std::string _name, std::string _version) : config(_name,_version, 5){};
 
     std::string name;
-    double version;
+    std::string version;
     int max_responses;
 };
 
 class ConverterJson {
     config *myConfig;
     nlohmann::json buffer;
+    std::ifstream file;
 public:
     ConverterJson ();
-    bool checkConfig();
+    std::string checkConfig(std::string file_name);
     ~ConverterJson();
 };
 #endif //SEARCH_ENGINE_CONVERTERJSON_H

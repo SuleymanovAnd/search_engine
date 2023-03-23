@@ -6,6 +6,12 @@
 #define SEARCH_ENGINE_CONFIG_EXCEPTION_H
 #include <exception>
 class ConfigException : public std::exception{
+    const char* message;
+public:
+    ConfigException(const char*  exception) :message(exception){}
 
+    const char*  what ()const noexcept override{
+        return message;
+    }
 };
 #endif //SEARCH_ENGINE_CONFIG_EXCEPTION_H
