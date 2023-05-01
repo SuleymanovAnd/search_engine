@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/">
-
+        <file>config.json</file>
+        <file>answers.json</file>
+        <file>config_test1.json</file>
+        <file>config_test2.json</file>
+        <file>config_test3.json</file>
     </qresource>
 </RCC>

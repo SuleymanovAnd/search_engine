@@ -8,6 +8,8 @@
 #include <fstream>
 #include "nlohmann/json.hpp"
 #include "config_exception.h"
+#include <QWidget>
+
 struct config{
     config (std::string _name, std::string _version,int _mResponses);
     config (std::string _name, std::string _version) : config(_name,_version, 5){};
@@ -17,12 +19,18 @@ struct config{
     int max_responses;
 };
 
-class ConverterJson {
+class ConverterJson{
     config *myConfig;
     nlohmann::json buffer;
     std::ifstream file;
+
 public:
     ConverterJson ();
+    ConverterJson (std::string file);
+    std::vector<std::string> GetTextDocuments(); //  список файлов
+    int GetResponsesLimit(); // получить лимит
+    std::vector<std::string> GetRequests(std::string file_name); // список запросов
+    void putAnswers(std::vector<std::vector<std::pair<int, float>>> answers);
     std::string checkConfig(std::string file_name);
     ~ConverterJson();
 };
