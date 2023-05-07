@@ -12,7 +12,7 @@
 
 struct config{
     config (std::string _name, std::string _version,int _mResponses);
-    config (std::string _name, std::string _version) : config(_name,_version, 5){};
+    config (std::string _name, std::string _version) : config(_name,_version, 5){}
 
     std::string name;
     std::string version;

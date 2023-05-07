@@ -4,6 +4,7 @@
 
 int main(int argc, char *argv[]) {
      QApplication app(argc, argv);
-   // ConverterJson converter;
+    ConverterJson converter;
+    converter.GetTextDocuments();
     return app.exec();
 }

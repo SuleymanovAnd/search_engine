@@ -29,6 +29,7 @@ EngineTst::~EngineTst()
 {
 
 }
+// #################################### Тестирование класса ConverterJson ################################################
 void EngineTst::TestGetTextDocuments()
 {
     ConverterJson converter ("config_test1.json");
@@ -66,6 +67,9 @@ void EngineTst::TestGetRequests(){
      ConverterJson converter;
     QVERIFY2(converter.GetRequests("requests.json").size() == 4, "requests file is empty");
 }
+// ############################### Окончание тестирование класса ConverterJson ###########################################
+
+
 
 QTEST_APPLESS_MAIN(EngineTst)
 
