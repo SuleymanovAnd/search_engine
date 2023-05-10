@@ -70,7 +70,7 @@ int ConverterJson::GetResponsesLimit() {
 }
 
 void ConverterJson::putAnswers(std::vector<std::vector<std::pair<int, float>>> answers) {
-    std::ofstream answers_file("answers.json");
+    std::ofstream answersFile("answers.json");
     nlohmann::json jAnswers;
 
     for (int j = 0; j < answers.size(); j++) {
@@ -101,7 +101,8 @@ void ConverterJson::putAnswers(std::vector<std::vector<std::pair<int, float>>> a
             jAnswers ["answers"]["requests" + std::to_string(j)] ["relevance"] = relevanceArr;
         }
     }
-    answers_file << jAnswers;
+    answersFile << jAnswers;
+    answersFile.close();
 }
 std::vector<std::string> ConverterJson::GetRequests(std::string file_name) {
     std::vector <std::string> requests;

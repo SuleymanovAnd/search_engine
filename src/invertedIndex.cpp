@@ -11,9 +11,9 @@ std::ifstream file;
 
        file.open(fileName);
        if (!file.is_open()) break;
-       else{char bufer [100000];
-           file.getline(bufer,sizeof(bufer));
-           docs.push_back(bufer);}
+       else{char buffer [100000];
+           file.getline(buffer,sizeof(buffer));
+           docs.push_back(buffer);}
 
     }
 }
