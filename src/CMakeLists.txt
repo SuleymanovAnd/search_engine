@@ -3,19 +3,20 @@ cmake_minimum_required(VERSION 3.22)
 set (MY_DIRECTORY ${CMAKE_SOURCE_DIR}/include)
 set(JSON_Install OFF CACHE INTERNAL "")
 set(SOURCE
-        invertedIndex.cpp
+		InvertedIndex.cpp
         ConverterJSON.cpp
         resources.qrc
         )
 set(INCLUDE
         ${MY_DIRECTORY}/ConverterJSON.h
         ${MY_DIRECTORY}/config_exception.h
-        ${MY_DIRECTORY}/invertedIndex.h
+        ${MY_DIRECTORY}/InvertedIndex.h
         )
 find_package(Qt5 COMPONENTS
 		 Core
 		 Gui
 		 Widgets
+		 Test
 REQUIRED
 )
 
@@ -32,5 +33,6 @@ target_link_libraries(search_engine PUBLIC
     nlohmann_json::nlohmann_json
     Qt5::Core
     Qt5::Gui
-    Qt5::Widgets)
+    Qt5::Widgets
+	Qt5::Test)
 
