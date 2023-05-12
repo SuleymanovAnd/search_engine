@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 #include <iostream>
+#pragma once
 
 struct Entry {
 size_t doc_id, count;
@@ -23,6 +24,8 @@ public:
 InvertedIndex() = default;
 ~InvertedIndex() = default;
 void UpdateDocumentBase(std::vector<std::string> input_docs);
+void UpdateBaseForDocument(const size_t& documentNumber,const std::string& document);
+void UpdateFreqDictionary (const std::string word,const size_t documentNumber, std::map <std::string,size_t> wordCount);
 std::vector<Entry> GetWordCount(const std::string& word);
 };
 

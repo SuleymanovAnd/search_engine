@@ -9,6 +9,7 @@
 #include "nlohmann/json.hpp"
 #include "config_exception.h"
 #include <QWidget>
+#pragma once
 
 struct config{
     config (std::string _name, std::string _version,int _mResponses);
