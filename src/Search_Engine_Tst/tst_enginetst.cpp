@@ -3,7 +3,7 @@
 // add necessary includes here
 #include <ConverterJSON.h>
 #include <InvertedIndex.h>
-
+#include <SearchServer.h>
 
 class EngineTst : public QObject
 {
@@ -23,6 +23,8 @@ private slots:
     void TestInvertedIndexBasic();
     void TestInvertedIndexBasic2();
     void TestInvertedIndexMissingWord ();
+    void TestSerchServerSimple ();
+    void TestSerchServerTopFive ();
 };
 
 EngineTst::EngineTst()
@@ -33,7 +35,7 @@ EngineTst::~EngineTst()
 {
 
 }
-// #################################### Тестирование класса ConverterJson ################################################
+// #################################### Тестирование класса ConverterJson ###############################################
 
 void EngineTst::TestCheckConfig() {
         // создание тестовых файлов
@@ -111,8 +113,8 @@ void EngineTst::TestGetRequests(){
      ConverterJson converter;
     QVERIFY2(converter.GetRequests("requests.json").size() == 4, "requests file is empty");
 }
-// ############################### Окончание тестирование класса ConverterJson ###########################################
-
+// ############################### Окончание тестирование класса ConverterJson ##########################################
+// ############################### Тестирование класса InvertedIndex ####################################################
 void EngineTst::TestInvertedIndexBasic() {
     const std::vector<std::string> docs = {"london is the capital of great britain",
                              "big ben is the nickname for the Great bell of the striking clock"};
@@ -166,7 +168,71 @@ void EngineTst::TestInvertedIndexMissingWord (){
         QVERIFY2 (result == expected,"MissingWord Failed");
 
 }
+// ############################### Окончание тестирование класса InvertedIndex ##########################################
+// ############################### Тестирование класса SearchServer #####################################################
+void EngineTst::TestSerchServerSimple(){
+    const std::vector<std::string> docs = {
+    "milk milk milk milk water water water",
+    "milk water water",
+    "milk milk milk milk milk water water water water water",
+    "americano cappuccino"
+    };
+    const std::vector<std::string> request = {"milk water", "sugar"};
+    const std::vector<std::vector<RelativeIndex>> expected = {{{2, 1},{0, 0.7},{1, 0.3}},{}};
+    InvertedIndex idx;
+    idx.UpdateDocumentBase(docs);
+    SearchServer srv(idx);
+    std::vector<std::vector<RelativeIndex>> result = srv.search(request);
 
+    QVERIFY2 (result == expected, "Simple Test Failed");
+}
+void EngineTst::TestSerchServerTopFive(){
+    const std::vector<std::string> docs = {
+    "london is the capital of great britain",
+    "paris is the capital of france",
+    "berlin is the capital of germany",
+    "rome is the capital of italy",
+    "madrid is the capital of spain",
+    "lisboa is the capital of portugal",
+    "bern is the capital of switzerland",
+    "moscow is the capital of russia",
+    "kiev is the capital of ukraine",
+    "minsk is the capital of belarus",
+    "astana is the capital of kazakhstan",
+    "beijing is the capital of china",
+    "tokyo is the capital of japan",
+    "bangkok is the capital of thailand",
+    "welcome to moscow the capital of russia the third rome",
+    "amsterdam is the capital of netherlands",
+    "helsinki is the capital of finland",
+    "oslo is the capital of norway",
+    "stockholm is the capital of sweden",
+    "riga is the capital of latvia",
+    "tallinn is the capital of estonia",
+    "warsaw is the capital of poland",
+    };
+    const std::vector<std::string> request = {"moscow is the capital of russia"};
+    const std::vector<std::vector<RelativeIndex>> expected = {{{7, 1},{14, 1},{0, 0.666666687},{1, 0.666666687},
+                                                          {2, 0.666666687}}};
+    InvertedIndex idx;
+    idx.UpdateDocumentBase(docs);
+    SearchServer srv(idx);
+    std::vector<std::vector<RelativeIndex>> result;
+    std::vector<std::vector<RelativeIndex>> temp = srv.search(request);
+
+    for(auto resultPart : temp ){
+        int i = 0;
+        std::vector<RelativeIndex> tempPart;
+        for(auto relevanceDocument : resultPart){
+            if(i <5){
+                tempPart.push_back(relevanceDocument);
+            i++;
+            }
+        }
+        result.push_back(tempPart);
+    }
+    QVERIFY2 (result == expected, "Test Top5 Failed");
+}
 QTEST_APPLESS_MAIN(EngineTst)
 
 #include "tst_enginetst.moc"
