@@ -7,7 +7,7 @@
 #include <utility>
 
 ConverterJson::ConverterJson() {
-    Q_INIT_RESOURCE(resources);
+
     myConfig = new config("", "0.1");
    std::cout << checkConfig("config.json") << std::endl;
 }
@@ -50,16 +50,31 @@ std::string ConverterJson::checkConfig(std::string file_name) {
 }
 
 std::vector<std::string> ConverterJson::GetTextDocuments() {
-    std::vector <std::string> files;
+    std::vector <std::string> filesContent;
         int i = 0;
         for(auto const f : buffer ["files"]){
-            files.push_back(f);
+            try{
+                std::string fileName = f.dump();
+            file.open (fileName);
+            if (!file.is_open()){
+                throw ConfigException("resources file is missing.");
+            }else {
+                nlohmann::json content;
+                file >> content;
+                file.close();
+              filesContent.push_back(content.dump());
+
+            }
+            }catch (const ConfigException &fail) {
+                std::cerr << fail.what() << std::endl;
+            }
+
             if (i >=1000){
                 throw ConfigException ("exceeding the number of requests");
             }
             i++;
         }
-    return files;
+    return filesContent;
 }
 
 int ConverterJson::GetResponsesLimit() {
@@ -103,6 +118,9 @@ void ConverterJson::putAnswers(std::vector<std::vector<std::pair<int, float>>> a
     }
     answersFile << jAnswers;
     answersFile.close();
+}
+std::vector<std::string> ConverterJson::GetRequests (){
+   return GetRequests("requests.json");
 }
 std::vector<std::string> ConverterJson::GetRequests(std::string file_name) {
     std::vector <std::string> requests;

@@ -28,11 +28,12 @@ class ConverterJson{
 public:
     ConverterJson ();
     ConverterJson (std::string file);
-    std::vector<std::string> GetTextDocuments(); //  список файлов
+    std::vector<std::string> GetTextDocuments(); //  содержимое файлов
     int GetResponsesLimit(); // получить лимит
+    std::vector<std::string> GetRequests ();
     std::vector<std::string> GetRequests(std::string file_name); // список запросов
     void putAnswers(std::vector<std::vector<std::pair<int, float>>> answers);
-    std::string checkConfig(std::string file_name);
+    std::string checkConfig(std::string file_name) ;
     ~ConverterJson();
 };
 #endif //SEARCH_ENGINE_CONVERTERJSON_H

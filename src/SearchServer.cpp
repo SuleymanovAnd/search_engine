@@ -15,7 +15,7 @@ std::multimap<B,A> flipMap(const std::map<A,B> &src)
     return invertedMap;
 }
 
-std::vector<std::vector<RelativeIndex>> SearchServer::search(const std::vector<std::string> &queries_input){
+std::vector<std::vector<RelativeIndex>> SearchServer::search(const std::vector<std::string> &queries_input, int responsesLimit){
 
     std::vector<std::vector<RelativeIndex>> answers;
 
@@ -108,6 +108,18 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(const std::vector<s
 
             answers.push_back(relativeRelevance);
     }
-    return answers;
+    std::vector<std::vector<RelativeIndex>> finalAnswers;
 
+    {    for(auto resultPart : answers ){
+            int i = responsesLimit;
+            std::vector<RelativeIndex> tempPart;
+            for(auto relevanceDocument : resultPart){
+                if(i >0){
+                    tempPart.push_back(relevanceDocument);
+                i--;
+                }
+            }
+            finalAnswers.push_back(tempPart);
+        }}
+    return finalAnswers;
 }

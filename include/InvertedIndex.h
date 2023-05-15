@@ -3,6 +3,10 @@
 #include <map>
 #include <vector>
 #include <iostream>
+#include <QMutex>
+#include <QMutexLocker>
+#include <ConverterJSON.h>
+
 #pragma once
 
 struct Entry {
@@ -16,15 +20,19 @@ size_t doc_id, count;
 
 class InvertedIndex {
 private:
+QMutex *dictionaryAcces;
 std::map<std::string, std::vector<Entry>> freq_dictionary;
 std::vector<std::string> docs;
 
-public:
-InvertedIndex() = default;
-~InvertedIndex() = default;
-void UpdateDocumentBase(std::vector<std::string> input_docs);
-void UpdateBaseForDocument(const size_t& documentNumber,const std::string& document);
+
+void UpdateBaseForDocument(const size_t documentNumber,const std::string document);
 void UpdateFreqDictionary (const std::string word,const size_t documentNumber, std::map <std::string,size_t> wordCount);
+
+public:
+
+InvertedIndex();
+~InvertedIndex()=default;
+void UpdateDocumentBase(std::vector<std::string> input_docs);
 std::vector<Entry> GetWordCount(const std::string& word);
 };
 

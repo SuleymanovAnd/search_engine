@@ -4,21 +4,42 @@
 #include <QElapsedTimer>
 #include <QFuture>
 #include <QtConcurrent>
+InvertedIndex::InvertedIndex(){
+    dictionaryAcces = new QMutex;
+}
+
+
 
 void InvertedIndex::UpdateFreqDictionary (const std::string word,const size_t documentNumber, std::map <std::string,size_t> wordCount){
+    dictionaryAcces->lock();
     if(freq_dictionary.count(word) == 0 ){ // если в базе не найдено
-        freq_dictionary[word].push_back({documentNumber,wordCount[word]}); // обновляем базу по слову
+        if(freq_dictionary[word].size() <= documentNumber ){
+           freq_dictionary[word].push_back({documentNumber,wordCount[word]}); // обновляем базу по слову
+        }else{
+           freq_dictionary[word][documentNumber] = {documentNumber,wordCount[word]};
+        }
+
      }else{
        bool found = false;
-       for (auto entryVector : freq_dictionary[word]){ // проверяем, есть ли по данному слову нужный документ
-            if(entryVector.doc_id == documentNumber ) {found = true;}
+       for (auto it = freq_dictionary[word].begin(); it < freq_dictionary[word].end();it++){ // проверяем, есть ли по данному слову нужный документ
+            if(it->doc_id == documentNumber ) {
+                found = true;
+                auto docPosition =  std::distance(freq_dictionary[word].begin(), it);
+               if(wordCount[word]>0) freq_dictionary[word][docPosition] = {documentNumber,wordCount[word]}; // и обновляем его, если он есть
+            }
        }
-        if(found){ // если есть
-            freq_dictionary[word][documentNumber] = {documentNumber,wordCount[word]}; // обновляем базу по документу
-        } else {freq_dictionary[word].push_back({documentNumber,wordCount[word]});} // иначе добавляем документ
+         if (!found){
+             if(freq_dictionary[word].size() <= documentNumber ){
+                 freq_dictionary[word].push_back({documentNumber,wordCount[word]}); // обновляем базу по слову
+             }else{
+                 freq_dictionary[word][documentNumber] = {documentNumber,wordCount[word]}; // иначе добавляем документ
+             };
+         }
     }
+
+    dictionaryAcces->unlock();
 }
-void InvertedIndex::UpdateBaseForDocument(const size_t& documentNumber, const std::string& document) {
+void InvertedIndex::UpdateBaseForDocument(const size_t documentNumber, const std::string document) {
     std::map <std::string,size_t> wordCount;
     std::string word;
     auto final_iterator = document.end();
@@ -52,11 +73,11 @@ void InvertedIndex::UpdateDocumentBase(std::vector<std::string> input_docs){
         docs.push_back(doc);
    }
     size_t documentNumber = 0;
-    QElapsedTimer timer;
+
     // создание потоков
     QList<QFuture<void>> handlers;
     // выпоолнение UpdateBaseForDocument в отдельных потоков
-    for (auto &document  : docs){
+    for (auto document  : docs){
         handlers.append(QtConcurrent::run(this,&InvertedIndex::UpdateBaseForDocument,documentNumber,document));
         documentNumber++;
     }
@@ -65,6 +86,6 @@ void InvertedIndex::UpdateDocumentBase(std::vector<std::string> input_docs){
     }
 }
 
-std::vector<Entry> InvertedIndex::GetWordCount(const std::string& word){
+std::vector<Entry> InvertedIndex::GetWordCount(const std::string& word) {
             return freq_dictionary[word];
 }

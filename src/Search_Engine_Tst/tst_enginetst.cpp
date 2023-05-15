@@ -217,20 +217,7 @@ void EngineTst::TestSerchServerTopFive(){
     InvertedIndex idx;
     idx.UpdateDocumentBase(docs);
     SearchServer srv(idx);
-    std::vector<std::vector<RelativeIndex>> result;
-    std::vector<std::vector<RelativeIndex>> temp = srv.search(request);
-
-    for(auto resultPart : temp ){
-        int i = 0;
-        std::vector<RelativeIndex> tempPart;
-        for(auto relevanceDocument : resultPart){
-            if(i <5){
-                tempPart.push_back(relevanceDocument);
-            i++;
-            }
-        }
-        result.push_back(tempPart);
-    }
+    std::vector<std::vector<RelativeIndex>> result = srv.search(request);
     QVERIFY2 (result == expected, "Test Top5 Failed");
 }
 QTEST_APPLESS_MAIN(EngineTst)

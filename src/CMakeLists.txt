@@ -6,7 +6,6 @@ set(SOURCE
         SearchServer.cpp
         InvertedIndex.cpp
         ConverterJSON.cpp
-        resources.qrc
         )
 set(INCLUDE
         ${MY_DIRECTORY}/ConverterJSON.h
