@@ -1,7 +1,6 @@
 #include "InvertedIndex.h"
 #include <fstream>
 #include <algorithm>
-#include <QElapsedTimer>
 #include <QFuture>
 #include <QtConcurrent>
 InvertedIndex::InvertedIndex(){

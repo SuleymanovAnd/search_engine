@@ -5,9 +5,9 @@
     "max_responses": 5
   },
   "files": [
-    "../resources/file001.txt",
-    "../resources/file002.txt",
-    "../resources/file003.txt",
-    "../resources/file004.txt"
+    "file001.txt",
+    "file002.txt",
+    "file003.txt",
+    "file004.txt"
   ]
 }
