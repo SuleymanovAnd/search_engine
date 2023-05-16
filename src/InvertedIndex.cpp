@@ -14,9 +14,15 @@ void InvertedIndex::UpdateFreqDictionary (const std::string word,const size_t do
     dictionaryAcces->lock();
     if(freq_dictionary.count(word) == 0 ){ // если в базе не найдено
         if(freq_dictionary[word].size() <= documentNumber ){
-           freq_dictionary[word].push_back({documentNumber,wordCount[word]}); // обновляем базу по слову
+           freq_dictionary[word].push_back({documentNumber,wordCount[word]});
         }else{
-           freq_dictionary[word][documentNumber] = {documentNumber,wordCount[word]};
+            int imputPlace = 0;
+            for(auto it = freq_dictionary[word].begin(); it < freq_dictionary[word].end();it++){
+
+                if(imputPlace == documentNumber){freq_dictionary[word].insert (it, {documentNumber,wordCount[word]});}
+            imputPlace++;
+            }
+
         }
 
      }else{
@@ -32,7 +38,12 @@ void InvertedIndex::UpdateFreqDictionary (const std::string word,const size_t do
              if(freq_dictionary[word].size() <= documentNumber ){
                  freq_dictionary[word].push_back({documentNumber,wordCount[word]}); // обновляем базу по слову
              }else{
-                 freq_dictionary[word][documentNumber] = {documentNumber,wordCount[word]}; // иначе добавляем документ
+                 int imputPlace = 0;
+                 for(auto it = freq_dictionary[word].begin(); it < freq_dictionary[word].end();it++){
+                     // иначе добавляем документ
+                     if(imputPlace == documentNumber){freq_dictionary[word].insert (it, {documentNumber,wordCount[word]});}
+                     imputPlace++;
+                 }
              };
          }
     }

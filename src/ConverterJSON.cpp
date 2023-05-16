@@ -54,15 +54,21 @@ std::vector<std::string> ConverterJson::GetTextDocuments() {
         int i = 0;
         for(auto const f : buffer ["files"]){
             try{
-                std::string fileName = f.dump();
+            std::string fileName = f;
             file.open (fileName);
             if (!file.is_open()){
                 throw ConfigException("resources file is missing.");
             }else {
-                nlohmann::json content;
-                file >> content;
+                std::string content;
+                while(!file.eof()){
+                   std::string tempStr;
+                   file >> tempStr;
+                   content += tempStr;
+                   if(!file.eof())content += " ";
+                }
+
                 file.close();
-              filesContent.push_back(content.dump());
+              filesContent.push_back(content);
 
             }
             }catch (const ConfigException &fail) {

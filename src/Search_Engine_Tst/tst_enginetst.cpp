@@ -44,9 +44,9 @@ void EngineTst::TestCheckConfig() {
     testFileContent["configs"]["name"] = "SkillboxSearchEngine";
     testFileContent["configs"]["version"] = "0.1";
     testFileContent["configs"]["max_responses"] = 5;
-    testFileContent["files"] = {"../resources/file001.txt",
-                                "../resources/file002.txt",
-                                "../resources/file003.txt"};
+    testFileContent["files"] = {"file001.txt",
+                                "file002.txt",
+                                "file003.txt"};
     testFile << testFileContent;
     testFile.close();
     testFileContent.clear();
@@ -54,9 +54,9 @@ void EngineTst::TestCheckConfig() {
     testFile.open("config_test2.json"); // файл с отсутствующим именем
     testFileContent["config"]["version"] = "0.1";
     testFileContent["config"]["max_responses"] = 3;
-    testFileContent["files"] = {"../resources/file001.txt",
-                                "../resources/file002.txt",
-                                "../resources/file003.txt"};
+    testFileContent["files"] = {"file001.txt",
+                                "file002.txt",
+                                "file003.txt"};
     testFile << testFileContent;
     testFile.close();
 
@@ -80,10 +80,12 @@ void EngineTst::TestCheckConfig() {
  QVERIFY2(converter.checkConfig("config.json")!="FAILURE", "config fail");
 }
 void EngineTst::TestGetTextDocuments()
-{
+{   std::ofstream testFile ("file001.txt");
+    testFile << "milk milk milk milk water water water";
+    testFile.close();
     ConverterJson converter ("config_test1.json");
-    QVERIFY2(converter.GetTextDocuments().size() == 3, "unable to get list of documents" );
-    QVERIFY2(converter.GetTextDocuments().front() == "../resources/file001.txt","incorrect reading of file names");
+    QVERIFY2(converter.GetTextDocuments().size() == 1, "unable to get list of documents" );
+    QVERIFY2(converter.GetTextDocuments().front() == "milk milk milk milk water water water","incorrect reading of file names");
 }
 void EngineTst::TestGetResponsesLimit(){
     ConverterJson converter ("config_test2.json");

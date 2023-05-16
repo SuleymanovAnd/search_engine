@@ -99,7 +99,11 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(const std::vector<s
                     if(i->rank < tempIndex.rank){
                          iteratorMax = i;
                          break;
-                     }
+                     } else if(i->rank == tempIndex.rank && i->doc_id > tempIndex.doc_id){
+                        iteratorMax = i;
+                        break;
+                    }
+
 
                 }
                relativeRelevance.emplace(iteratorMax,tempIndex);
