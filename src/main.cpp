@@ -27,5 +27,6 @@ int main() {
             searchResult.push_back(searchResultPart);
         }
         converter.putAnswers(searchResult);
+        std::cout << "Answers in file \"answers.json\""<<std::endl;
     }
 }

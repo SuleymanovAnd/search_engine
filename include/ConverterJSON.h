@@ -28,6 +28,9 @@ class ConverterJson{
 public:
     ConverterJson ();
     ConverterJson (std::string file);
+    ConverterJson (const ConverterJson & oth);
+    ConverterJson& operator =(const ConverterJson &oth);
+
     std::vector<std::string> GetTextDocuments(); //  содержимое файлов
     int GetResponsesLimit(); // получить лимит
     std::vector<std::string> GetRequests ();

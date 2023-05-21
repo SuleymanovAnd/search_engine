@@ -1,14 +1,30 @@
 #include "InvertedIndex.h"
 #include <fstream>
 #include <algorithm>
-#include <QFuture>
-#include <QtConcurrent>
+
 InvertedIndex::InvertedIndex(){
     dictionaryAcces = new QMutex;
 }
-
-
-
+InvertedIndex::InvertedIndex(const InvertedIndex &oth){
+    dictionaryAcces = new QMutex;
+    freq_dictionary = oth.freq_dictionary;
+    docs = oth.docs;
+}
+InvertedIndex& InvertedIndex:: operator = (const InvertedIndex & oth){
+    if(this == &oth){
+        return *this;
+    }
+    freq_dictionary = oth.freq_dictionary;
+    docs = oth.docs;
+    if(dictionaryAcces != nullptr){
+        delete dictionaryAcces;
+    }
+    dictionaryAcces = new QMutex;
+     return *this;
+}
+InvertedIndex::~InvertedIndex(){
+    delete dictionaryAcces;
+}
 void InvertedIndex::UpdateFreqDictionary (const std::string word,const size_t documentNumber, std::map <std::string,size_t> wordCount){
     dictionaryAcces->lock();
     if(freq_dictionary.count(word) == 0 ){ // если в базе не найдено

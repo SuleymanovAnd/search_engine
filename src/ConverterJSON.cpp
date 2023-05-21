@@ -3,18 +3,28 @@
 //
 
 #include "ConverterJSON.h"
-
 #include <utility>
 
-ConverterJson::ConverterJson() {
-
-    myConfig = new config("", "0.1");
-   std::cout << checkConfig("config.json") << std::endl;
-}
+ConverterJson::ConverterJson () : ConverterJson ("../config/config.json"){}
 
 ConverterJson::ConverterJson(std::string file){
      myConfig = new config("", "0.1");
-     std::cout << checkConfig(file) << std::endl;
+     std::cout << "Search engine name: " << checkConfig(std::move(file)) << std::endl;
+}
+ConverterJson::ConverterJson (const ConverterJson & oth){
+    buffer = oth.buffer;
+    myConfig = new config(*oth.myConfig);
+}
+ConverterJson& ConverterJson::operator =(const ConverterJson &oth){
+        if(this == &oth){
+            return *this;
+        }
+        buffer = oth.buffer;
+        if(myConfig != nullptr){
+            delete myConfig;
+        }
+        myConfig = new config(*oth.myConfig);
+        return *this;
 }
 
 ConverterJson::~ConverterJson() {
@@ -91,7 +101,7 @@ int ConverterJson::GetResponsesLimit() {
 }
 
 void ConverterJson::putAnswers(std::vector<std::vector<std::pair<int, float>>> answers) {
-    std::ofstream answersFile("answers.json");
+    std::ofstream answersFile("../answers/answers.json");
     nlohmann::json jAnswers;
 
     for (int j = 0; j < answers.size(); j++) {
@@ -126,7 +136,7 @@ void ConverterJson::putAnswers(std::vector<std::vector<std::pair<int, float>>> a
     answersFile.close();
 }
 std::vector<std::string> ConverterJson::GetRequests (){
-   return GetRequests("requests.json");
+   return GetRequests("../requests/requests.json");
 }
 std::vector<std::string> ConverterJson::GetRequests(std::string file_name) {
     std::vector <std::string> requests;

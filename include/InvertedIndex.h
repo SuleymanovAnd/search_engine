@@ -5,6 +5,8 @@
 #include <iostream>
 #include <QMutex>
 #include <QMutexLocker>
+#include <QFuture>
+#include <QtConcurrent>
 #include <ConverterJSON.h>
 
 #pragma once
@@ -20,6 +22,7 @@ size_t doc_id, count;
 
 class InvertedIndex {
 private:
+
 QMutex *dictionaryAcces;
 std::map<std::string, std::vector<Entry>> freq_dictionary;
 std::vector<std::string> docs;
@@ -31,7 +34,9 @@ void UpdateFreqDictionary (const std::string word,const size_t documentNumber, s
 public:
 
 InvertedIndex();
-~InvertedIndex()=default;
+InvertedIndex(const InvertedIndex &oth);
+InvertedIndex& operator = (const InvertedIndex & oth);
+~InvertedIndex();
 void UpdateDocumentBase(std::vector<std::string> input_docs);
 std::vector<Entry> GetWordCount(const std::string& word);
 };

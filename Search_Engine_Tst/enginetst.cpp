@@ -97,7 +97,7 @@ void EngineTst::TestPutAnswers(){
     std::vector<std::vector<std::pair<int, float>>> answers = {{{10,15.3},{13,12.2}}, {{5,3.2}},{}};
     ConverterJson converter;
     converter.putAnswers(answers);
-    std::ifstream file ("answers.json");
+    std::ifstream file ("../answers/answers.json");
     file >> testFile;
     file.close();
 
@@ -224,4 +224,4 @@ void EngineTst::TestSerchServerTopFive(){
 }
 QTEST_APPLESS_MAIN(EngineTst)
 
-#include "tst_enginetst.moc"
+#include "enginetst.moc"
