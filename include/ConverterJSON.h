@@ -1,8 +1,8 @@
 
 // Created by Андрей on 22.03.2023.
 
-#ifndef SEARCH_ENGINE_CONVERTERJSON_H
-#define SEARCH_ENGINE_CONVERTERJSON_H
+#ifndef SEARCHENGINE_LIBRARY_CONVERTERJSON_H
+#define SEARCHENGINE_LIBRARY_CONVERTERJSON_H
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -39,4 +39,4 @@ public:
     std::string checkConfig(std::string file_name) ;
     ~ConverterJson();
 };
-#endif //SEARCH_ENGINE_CONVERTERJSON_H
+#endif //SEARCHENGINE_LIBRARY_CONVERTERJSON_H

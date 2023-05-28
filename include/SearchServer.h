@@ -1,5 +1,5 @@
-#ifndef SEARCHSERVER_H
-#define SEARCHSERVER_H
+#ifndef SEARCHENGINE_LIBRARY_SEARCHSERVER_H
+#define SEARCHENGINE_LIBRARY_SEARCHSERVER_H
 #include "ConverterJSON.h"
 #include "InvertedIndex.h"
 #pragma once
@@ -24,4 +24,4 @@ public:
 private:
     InvertedIndex _index;
 };
-#endif // SEARCHSERVER_H
+#endif // SEARCHENGINE_LIBRARY_SEARCHSERVER_H

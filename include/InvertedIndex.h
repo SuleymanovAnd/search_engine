@@ -1,5 +1,5 @@
-#ifndef INVERTEDINDEX_H
-#define INVERTEDINDEX_H
+#ifndef SEARCHENGINE_LIBRARY_INVERTEDINDEX_H
+#define SEARCHENGINE_LIBRARY_INVERTEDINDEX_H
 #include <map>
 #include <vector>
 #include <iostream>
@@ -41,4 +41,4 @@ void UpdateDocumentBase(std::vector<std::string> input_docs);
 std::vector<Entry> GetWordCount(const std::string& word);
 };
 
-#endif // INVERTEDINDEX_H
+#endif // SEARCHENGINE_LIBRARY_INVERTEDINDEX_H
