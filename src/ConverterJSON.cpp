@@ -4,9 +4,7 @@
 
 #include "ConverterJSON.h"
 #include <utility>
-
 ConverterJson::ConverterJson () : ConverterJson ("../config/config.json"){}
-
 ConverterJson::ConverterJson(std::string file){
      myConfig = new config("", "0.1");
      std::cout << "Search engine name: " << checkConfig(std::move(file)) << std::endl;
@@ -26,11 +24,9 @@ ConverterJson& ConverterJson::operator =(const ConverterJson &oth){
         myConfig = new config(*oth.myConfig);
         return *this;
 }
-
 ConverterJson::~ConverterJson() {
     delete myConfig;
 }
-
 std::string ConverterJson::checkConfig(std::string file_name) {
 
     try{

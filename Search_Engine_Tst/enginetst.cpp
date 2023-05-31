@@ -14,17 +14,16 @@ public:
     ~EngineTst();
 
 private slots:
-
-    void TestCheckConfig ();
-    void TestGetTextDocuments();
-    void TestGetResponsesLimit();
-    void TestPutAnswers();
-    void TestGetRequests();
-    void TestInvertedIndexBasic();
-    void TestInvertedIndexBasic2();
-    void TestInvertedIndexMissingWord ();
-    void TestSerchServerSimple ();
-    void TestSerchServerTopFive ();
+    void TestCheckConfig ();              /// тест метода CheckConfig класса ConverterJson
+    void TestGetTextDocuments();          /// тест метода GetTextDocuments класса ConverterJson
+    void TestGetResponsesLimit();         /// тест метода GetResponsesLimit класса ConverterJson
+    void TestPutAnswers();                /// тест метода PutAnswers класса ConverterJson
+    void TestGetRequests();               /// тест метода GetRequests класса ConverterJson
+    void TestInvertedIndexBasic();        /// простой тест класса InvertedIndex
+    void TestInvertedIndexBasic2();       /// второй простой тест класса InvertedIndex
+    void TestInvertedIndexMissingWord (); /// тест класса InvertedIndex на отсутсвующее слово в базе
+    void TestSerchServerSimple ();        /// простой тест класса SerchServer
+    void TestSerchServerTopFive ();       /// тест пяти первых ответов класса SerchServer
 };
 
 EngineTst::EngineTst()

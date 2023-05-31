@@ -10,33 +10,124 @@
 #include "config_exception.h"
 #include <QWidget>
 #pragma once
-
+/**
+ * @brief config
+ * Структура конфигурации проекта
+ */
 struct config{
+    /**
+     * @brief config конструктор
+     *
+     * @param _name имя поискового движка
+     * @param _version версия поискового движка
+     * @param _mResponses мах количество ответов на запрос
+     */
     config (std::string _name, std::string _version,int _mResponses);
+    /**
+     * @brief config конструктор со стандартным количеством ответов = 5
+     *
+     * @overload
+     */
     config (std::string _name, std::string _version) : config(_name,_version, 5){}
 
-    std::string name;
-    std::string version;
-    int max_responses;
+    std::string name;       ///имя поискового движка
+    std::string version;    ///версия поискового движка
+    int max_responses;      ///мах количество ответов на запрос
 };
 
+
+/**
+ * @brief ConverterJson
+ * Класс для работы с JSON файлами
+ */
 class ConverterJson{
-    config *myConfig;
-    nlohmann::json buffer;
-    std::ifstream file;
+    config *myConfig;   /// указатель на конфигурацию проекта.
+    nlohmann::json buffer;  /// буфер для хранения информации json формата.
+    std::ifstream file;     /// поток для работы с файлами.
 
 public:
+    /// Сандартный конструктор ConverterJson
     ConverterJson ();
+
+    /// Конструктор ConverterJson принимающий путь\имя файла конфигурации
     ConverterJson (std::string file);
+
+    ///Конструктор копирования
     ConverterJson (const ConverterJson & oth);
+
+    ///Конструктор присвоения
     ConverterJson& operator =(const ConverterJson &oth);
 
-    std::vector<std::string> GetTextDocuments(); //  содержимое файлов
-    int GetResponsesLimit(); // получить лимит
+    /**
+     * @brief GetTextDocuments
+     * Метод для получения текста документов из ресурсных файлов,
+     * перечисленных в файле конфигурации config.json
+     *
+     * @throws ConfigException если отутствует какой-либо файл русурсов
+     * @throw ConfigException если количество ресурсных файлов больше или равно 1000
+     *
+     * @exception strong
+     *
+     * @return возвращает вектор, по строке для каждого ресурсного файла
+     */
+    std::vector<std::string> GetTextDocuments();
+
+
+    /**
+     * @brief GetResponsesLimit
+     * Метод считывает поле max_responses для определения предельного
+     * количества ответов на один запрос
+     *
+     * @return возвращает мах число ответов
+     */
+    int GetResponsesLimit();
+
+    /**
+     * @brief GetRequests
+     * Метод для получения запросов из файла requests.json
+     *
+     * @overload
+     */
     std::vector<std::string> GetRequests ();
-    std::vector<std::string> GetRequests(std::string file_name); // список запросов
+
+    /**
+     * @brief GetRequests
+     * Метод для получения запросов из файла
+     *
+     * @throw ConfigException если отсутствует файл запросов
+     * @throw ConfigException если файл запроса пуст
+     *
+     * @exception strong
+     *
+     * @param file_name имя файла запроса
+     * @return возвращает список запросов из файла
+     */
+    std::vector<std::string> GetRequests(std::string file_name);
+
+    /**
+     * @brief putAnswers
+     * Метод помещающий результаты запросов в файл ответов answers.json
+     *
+     * @param возвращает вектор по каждому запросу с вектором пар (номер каждого ресурсного файла и его релевантность)
+     */
     void putAnswers(std::vector<std::vector<std::pair<int, float>>> answers);
+
+    /**
+     * checkConfig
+     * Метод для проверки наличия и коректности файла конфигурации
+     *
+     * @throw ConfigException если отсутствует файл конфигурации
+     * @throw ConfigException если файл конфигурации пуст
+     * @throw ConfigException если отсутсвует имя поискового движка
+     * @throw ConfigException конфликт версии поискового движка
+     *
+     * @exception strong
+     * @tparam file_name путь\имя файла конфигурации
+     * @return возвращает название поискового движка или строку FAILURE при выбросе исключения
+     */
     std::string checkConfig(std::string file_name) ;
+
+    ///Деструктор ConverterJson
     ~ConverterJson();
 };
 #endif //SEARCHENGINE_LIBRARY_CONVERTERJSON_H

@@ -26,7 +26,7 @@ InvertedIndex::~InvertedIndex(){
     delete dictionaryAcces;
 }
 void InvertedIndex::UpdateFreqDictionary (const std::string word,const size_t documentNumber, std::map <std::string,size_t> wordCount){
-    dictionaryAcces->lock();
+    QMutexLocker locker (dictionaryAcces);
     if(freq_dictionary.count(word) == 0 ){ // если в базе не найдено
         if(freq_dictionary[word].size() <= documentNumber ){
            freq_dictionary[word].push_back({documentNumber,wordCount[word]});
@@ -62,8 +62,6 @@ void InvertedIndex::UpdateFreqDictionary (const std::string word,const size_t do
              };
          }
     }
-
-    dictionaryAcces->unlock();
 }
 void InvertedIndex::UpdateBaseForDocument(const size_t documentNumber, const std::string document) {
     std::map <std::string,size_t> wordCount;
