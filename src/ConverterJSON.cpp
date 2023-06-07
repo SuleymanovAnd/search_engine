@@ -27,7 +27,7 @@ ConverterJson& ConverterJson::operator =(const ConverterJson &oth){
 ConverterJson::~ConverterJson() {
     delete myConfig;
 }
-std::string ConverterJson::checkConfig(std::string file_name) {
+std::string ConverterJson::checkConfig(const std::string& file_name) {
 
     try{
         file.open(file_name);
@@ -57,34 +57,43 @@ std::string ConverterJson::checkConfig(std::string file_name) {
 
 std::vector<std::string> ConverterJson::GetTextDocuments() {
     std::vector <std::string> filesContent;
-        int i = 0;
         for(auto const f : buffer ["files"]){
             try{
+            bool correctWordsCount = true;
+            bool correctWordsSize = true;
             std::string fileName = f;
             file.open (fileName);
             if (!file.is_open()){
                 throw ConfigException("resources file is missing.");
             }else {
+
                 std::string content;
+                    int wordCount = 0;
                 while(!file.eof()){
                    std::string tempStr;
+                   bool correctWordSize = true;
                    file >> tempStr;
-                   content += tempStr;
-                   if(!file.eof())content += " ";
+                   if(tempStr.size()>100){
+                       correctWordSize = false;
+                       correctWordsSize = false;
+                   }
+                   if(correctWordSize && correctWordsCount){
+                       content += tempStr;
+                       if(!file.eof())content += " ";
+                   }
+                   if(wordCount>1000){correctWordsCount = false;}
+                   wordCount++;
                 }
-
                 file.close();
-              filesContent.push_back(content);
+             if(correctWordsCount) filesContent.push_back(content);
+             else filesContent.push_back("");
 
             }
+            if(!correctWordsCount){throw ConfigException("words count > 1000");}
+            if(!correctWordsSize){throw ConfigException("word length > 100 symbols");}
             }catch (const ConfigException &fail) {
                 std::cerr << fail.what() << std::endl;
             }
-
-            if (i >=1000){
-                throw ConfigException ("exceeding the number of requests");
-            }
-            i++;
         }
     return filesContent;
 }
@@ -134,9 +143,11 @@ void ConverterJson::putAnswers(std::vector<std::vector<std::pair<int, float>>> a
 std::vector<std::string> ConverterJson::GetRequests (){
    return GetRequests("../requests/requests.json");
 }
-std::vector<std::string> ConverterJson::GetRequests(std::string file_name) {
+std::vector<std::string> ConverterJson::GetRequests(const std::string& file_name) {
     std::vector <std::string> requests;
     try{
+    bool correctRequests = true;
+    bool correctCount = true;
     file.open (file_name);
     if (!file.is_open()){
         throw ConfigException("requests file is missing.");
@@ -147,12 +158,40 @@ std::vector<std::string> ConverterJson::GetRequests(std::string file_name) {
         if (buffer["requests"] == nullptr){
             throw ConfigException ("requests file is empty.");
         }else {
-            for (auto r : buffer["requests"]){
-                requests.push_back(r);
+            int requestsCount =0;
+                for (auto request : buffer["requests"]){
+                // проверка валидности запроса
+                if(correctCount){
+                    int wordCount = 0;
+                    int symbolCount = 0;
+                    bool correctRequest = true;
+                    std::string strRequest = request;
+                    for(auto word :strRequest){
+                        if(word == ' '){
+                            wordCount++;
+                            symbolCount = 0;
+                        }
+                        if (word != ' ')symbolCount++;
+                        if(symbolCount >= 100 || wordCount > 10){
+                            correctRequest = false;
+                            correctRequests = false;
+                        }
+                    }
+
+                    //
+                    if (correctRequest){
+                        requestsCount ++;
+                        if (requestsCount >=1000){
+                            correctCount = false;
+                        }
+                        requests.push_back(request);
+                    }
+                }
             }
         }
     }
-
+    if(!correctRequests)throw ConfigException ("uncorrect request");
+    if(!correctCount)  throw ConfigException ("number of requests exceeded");
     }
     catch (const ConfigException &fail) {
         std::cerr << fail.what() << std::endl;

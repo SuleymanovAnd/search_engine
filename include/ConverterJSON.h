@@ -64,7 +64,8 @@ public:
      * перечисленных в файле конфигурации config.json
      *
      * @throws ConfigException если отутствует какой-либо файл русурсов
-     * @throw ConfigException если количество ресурсных файлов больше или равно 1000
+     * @throw ConfigException если слов в тексте больше 1000
+     * @throw ConfigException если количество символов больше 100
      *
      * @exception strong
      *
@@ -96,13 +97,15 @@ public:
      *
      * @throw ConfigException если отсутствует файл запросов
      * @throw ConfigException если файл запроса пуст
+     * @throw ConfigException есил количество слов в запросе больше 10 и длина слова больше 100 символов
+     * @throw ConfigException если количество запросов больше 1000
      *
      * @exception strong
      *
      * @param file_name имя файла запроса
      * @return возвращает список запросов из файла
      */
-    std::vector<std::string> GetRequests(std::string file_name);
+    std::vector<std::string> GetRequests(const std::string& file_name);
 
     /**
      * @brief putAnswers
@@ -125,7 +128,7 @@ public:
      * @tparam file_name путь\имя файла конфигурации
      * @return возвращает название поискового движка или строку FAILURE при выбросе исключения
      */
-    std::string checkConfig(std::string file_name) ;
+    std::string checkConfig(const std::string& file_name) ;
 
     ///Деструктор ConverterJson
     ~ConverterJson();
